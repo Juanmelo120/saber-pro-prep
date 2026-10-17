@@ -2,7 +2,7 @@
  * desde http://localhost o un servidor. Con doble clic en index.html (file://) no hay
  * service worker: la app funciona igual, solo que sin esta caché. */
 'use strict';
-const VERSION = 'spp-v4';
+const VERSION = 'spp-v5';
 const ARCHIVOS = [
   './',
   './index.html',
@@ -36,9 +36,18 @@ self.addEventListener('activate', function (evento) {
   self.clients.claim();
 });
 
+// Red primero: así la app y el manifest se actualizan al recargar. Sin conexión, usa la caché.
 self.addEventListener('fetch', function (evento) {
   if (evento.request.method !== 'GET') return;
-  evento.respondWith(caches.match(evento.request).then(function (en) {
-    return en || fetch(evento.request).catch(function () { return caches.match('./index.html'); });
-  }));
+  evento.respondWith(
+    fetch(evento.request).then(function (respuesta) {
+      if (respuesta && respuesta.status === 200 && respuesta.type === 'basic') {
+        var copia = respuesta.clone();
+        caches.open(VERSION).then(function (c) { c.put(evento.request, copia); });
+      }
+      return respuesta;
+    }).catch(function () {
+      return caches.match(evento.request).then(function (en) { return en || caches.match('./index.html'); });
+    })
+  );
 });
