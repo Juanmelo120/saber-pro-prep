@@ -2,11 +2,15 @@
  * desde http://localhost o un servidor. Con doble clic en index.html (file://) no hay
  * service worker: la app funciona igual, solo que sin esta caché. */
 'use strict';
-const VERSION = 'spp-v3';
+const VERSION = 'spp-v4';
 const ARCHIVOS = [
   './',
   './index.html',
   './manifest.json',
+  './assets/img/icon-192.png',
+  './assets/img/icon-512.png',
+  './assets/img/icon-maskable-512.png',
+  './assets/img/apple-touch-icon.png',
   './assets/css/styles.css',
   './assets/js/scoring.js',
   './assets/js/timer.js',

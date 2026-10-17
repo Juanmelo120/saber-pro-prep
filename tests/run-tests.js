@@ -310,6 +310,14 @@ test('puntaje global rechaza valores fuera de 0 a 300, decimales y módulos obli
   assert.strictEqual(pg.puntajeGlobal({ RC: '250', LC: '200', CC: '', CE: '210' }).ok, false);
   assert.strictEqual(pg.puntajeGlobal({ RC: '0', LC: '0', CC: '0', CE: '0' }).pg, 0);
 });
+test('el manifest tiene íconos de 192 y 512 px que existen (requisito de instalación)', () => {
+  const fs = require('fs');
+  const m = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'manifest.json'), 'utf8'));
+  const tamanos = m.icons.map(i => i.sizes);
+  assert.ok(tamanos.includes('192x192') && tamanos.includes('512x512'), 'faltan íconos 192 o 512');
+  for (const i of m.icons) assert.ok(fs.existsSync(path.join(__dirname, '..', i.src)), 'no existe ' + i.src);
+  assert.strictEqual(m.display, 'standalone');
+});
 
 console.log('\n' + passed + ' pruebas correctas, ' + failed + ' fallidas.');
 if (failed) { console.log('\nFallos:\n- ' + failures.join('\n- ')); process.exit(1); }
