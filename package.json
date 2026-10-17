@@ -1,0 +1,10 @@
+{
+  "name": "saber-pro-prep",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Herramienta personal de práctica para el Saber Pro. No es un producto oficial del ICFES.",
+  "scripts": {
+    "test": "node tests/run-tests.js && node tests/contraste.js && node tests/ui-smoke.js"
+  },
+  "license": "UNLICENSED"
+}
